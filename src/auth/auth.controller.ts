@@ -10,15 +10,13 @@ import {
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 import { Tokens } from './types';
-import { Request } from 'express';
-import { AtGuard, RtGuard } from 'src/common/guards';
+import { RtGuard } from 'src/common/guards';
 import { UserId } from 'src/users/user.entity';
 import {
   GetCurrentUser,
   GetCurrentUserId,
   PublicEndpoint,
 } from 'src/common/decorators';
-import { Public } from '@prisma/client/runtime/library';
 
 @Controller('auth')
 export class AuthController {
@@ -38,20 +36,20 @@ export class AuthController {
     return this.authService.signinLocal(dto);
   }
 
-  @PublicEndpoint()
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId: UserId) {
     return this.authService.logout(userId);
   }
 
+  @PublicEndpoint()
   @UseGuards(RtGuard)
-  @Post('/refresh')
+  @Post('refresh')
   @HttpCode(HttpStatus.OK)
   refresh(
+    @GetCurrentUserId() userId: number,
     @GetCurrentUser('refreshToken') refreshToken: string,
-    @GetCurrentUserId() userId: UserId,
-  ) {
+  ): Promise<Tokens> {
     return this.authService.refresh(userId, refreshToken);
   }
 }
