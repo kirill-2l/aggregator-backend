@@ -4,32 +4,31 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
-import { Tokens } from './types';
-import { RtGuard } from 'src/common/guards';
-import { UserId } from 'src/users/user.entity';
 import {
   GetCurrentUser,
   GetCurrentUserId,
-  PublicEndpoint,
+  Public,
 } from 'src/common/decorators';
+import { RtGuard } from 'src/common/guards';
+import { UserId } from 'src/users/user.entity';
+import { AuthService } from './auth.service';
+import { AuthDto } from './dto';
+import { Tokens } from './types';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @PublicEndpoint()
+  @Public()
   @Post('local/signup')
   @HttpCode(HttpStatus.CREATED)
   signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
     return this.authService.signupLocal(dto);
   }
 
-  @PublicEndpoint()
+  @Public()
   @Post('local/signin')
   @HttpCode(HttpStatus.OK)
   signinLocal(@Body() dto: AuthDto): Promise<Tokens> {
@@ -42,7 +41,7 @@ export class AuthController {
     return this.authService.logout(userId);
   }
 
-  @PublicEndpoint()
+  @Public()
   @UseGuards(RtGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)

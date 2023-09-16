@@ -2,9 +2,10 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
+import { StrategyName } from 'src/auth/types';
 
 @Injectable()
-export class AtGuard extends AuthGuard('jwt') {
+export class AtGuard extends AuthGuard(StrategyName.JWT) {
   constructor(private reflector: Reflector) {
     super();
   }
