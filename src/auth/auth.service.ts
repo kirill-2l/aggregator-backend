@@ -10,11 +10,11 @@ import { UserId } from 'src/users/user.entity';
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-  async signupLocal(dto: AuthDto): Promise<Tokens> {
+  async signUpLocal(dto: AuthDto): Promise<Tokens> {
     const hash = await this.hashData(dto.password);
     const newUser = await this.prisma.user.create({
       data: {
-        email: dto.email,
+        email: dto.username,
         password: dto.password,
         hash,
       },
@@ -27,10 +27,10 @@ export class AuthService {
     return tokens;
   }
 
-  async signinLocal(dto: AuthDto): Promise<Tokens> {
+  async signInLocal(dto: AuthDto): Promise<Tokens> {
     const user = await this.prisma.user.findUnique({
       where: {
-        email: dto.email,
+        email: dto.username,
       },
     });
 
@@ -46,7 +46,7 @@ export class AuthService {
     return tokens;
   }
 
-  async logout(userId: UserId) {
+  async signOut(userId: UserId) {
     await this.prisma.user.updateMany({
       where: {
         id: userId,

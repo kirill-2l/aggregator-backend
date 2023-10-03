@@ -9,7 +9,7 @@ export class AuthDto {
     example: 'mail@google.com',
     uniqueItems: true,
   })
-  email: string;
+  username: string;
   @IsNotEmpty()
   @IsString()
   @ApiProperty({

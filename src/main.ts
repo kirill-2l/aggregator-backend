@@ -5,9 +5,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { AtGuard } from './common/guards';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: ['debug', 'error'],
+  });
 
   app.useGlobalPipes(new ValidationPipe());
+  app.setGlobalPrefix('api/v1');
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Median')

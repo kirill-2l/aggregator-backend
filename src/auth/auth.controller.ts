@@ -22,23 +22,24 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
-  @Post('local/signup')
+  @Post('local/sign-up')
   @HttpCode(HttpStatus.CREATED)
-  signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    return this.authService.signupLocal(dto);
+  signUpLocal(@Body() dto: AuthDto): Promise<Tokens> {
+    return this.authService.signUpLocal(dto);
   }
 
   @Public()
-  @Post('local/signin')
+  @Post('local/sign-in')
   @HttpCode(HttpStatus.OK)
-  signinLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    return this.authService.signinLocal(dto);
+  signInLocal(@Body() dto: AuthDto): Promise<Tokens> {
+    console.log(dto);
+    return this.authService.signInLocal(dto);
   }
 
-  @Post('logout')
+  @Post('sign-out')
   @HttpCode(HttpStatus.OK)
-  logout(@GetCurrentUserId() userId: UserId) {
-    return this.authService.logout(userId);
+  signOut(@GetCurrentUserId() userId: UserId) {
+    return this.authService.signOut(userId);
   }
 
   @Public()
