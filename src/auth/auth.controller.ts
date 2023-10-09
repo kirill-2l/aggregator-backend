@@ -12,10 +12,10 @@ import {
   Public,
 } from 'src/common/decorators';
 import { RtGuard } from 'src/common/guards';
-import { UserId } from 'src/users/user.entity';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto';
 import { SignInResponse, SignUpResponse, Tokens } from './types';
+import { UserId } from 'src/user/types';
 
 @Controller('auth')
 export class AuthController {

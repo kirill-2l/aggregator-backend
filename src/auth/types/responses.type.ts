@@ -1,4 +1,4 @@
-import { User } from 'src/users/user.entity';
+import { User } from 'src/user/types';
 import { Tokens } from './tokens.type';
 
 export interface SignInResponse {

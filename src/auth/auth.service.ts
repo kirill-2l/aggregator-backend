@@ -4,7 +4,7 @@ import { SignInDto, SignUpDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { SignInResponse, SignUpResponse, Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
-import { UserId } from 'src/users/user.entity';
+import { UserId } from 'src/user/types';
 
 @Injectable()
 export class AuthService {
@@ -12,11 +12,11 @@ export class AuthService {
 
   async signUpLocal(dto: SignUpDto): Promise<SignUpResponse> {
     const hash = await this.hashData(dto.password);
+    console.log(hash);
     const newUser = await this.prisma.user.create({
       data: {
         email: dto.username,
         password: dto.password,
-        name: dto.name,
         hash,
       },
     });
@@ -25,12 +25,7 @@ export class AuthService {
 
     await this.updateRtHash(newUser.id, tokens.refresh_token);
 
-    return {
-      name: newUser.name,
-      password: newUser.password,
-      email: newUser.email,
-      tokens,
-    };
+    return tokens as any;
   }
 
   async signInLocal(dto: SignInDto): Promise<SignInResponse> {
@@ -39,6 +34,7 @@ export class AuthService {
         email: dto.email,
       },
     });
+
     if (!user) throw new ForbiddenException('Access Denied');
 
     const passwordMatches = await bcrypt.compare(dto.password, user.hash);
@@ -47,13 +43,8 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.email);
 
     await this.updateRtHash(user.id, tokens.refresh_token);
-    return {
-      tokens,
-      user: {
-        id: user.id,
-        email: user.email,
-      },
-    };
+
+    return tokens as any;
   }
 
   async signOut(userId: UserId) {
@@ -71,7 +62,7 @@ export class AuthService {
     return true;
   }
 
-  async refresh(userId: number, rt: string) {
+  async refresh(userId: UserId, rt: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -90,7 +81,7 @@ export class AuthService {
     return tokens;
   }
 
-  async updateRtHash(userId: number, rt: string) {
+  async updateRtHash(userId: UserId, rt: string) {
     const hash = await this.hashData(rt);
     await this.prisma.user.update({
       where: {
@@ -106,7 +97,7 @@ export class AuthService {
     return bcrypt.hash(data, 10);
   }
 
-  async getTokens(userId: number, email: string) {
+  async getTokens(userId: UserId, email: string) {
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(
         {
