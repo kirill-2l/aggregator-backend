@@ -14,8 +14,8 @@ import {
 import { RtGuard } from 'src/common/guards';
 import { UserId } from 'src/users/user.entity';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
-import { Tokens } from './types';
+import { SignInDto, SignUpDto } from './dto';
+import { SignInResponse, SignUpResponse, Tokens } from './types';
 
 @Controller('auth')
 export class AuthController {
@@ -24,15 +24,14 @@ export class AuthController {
   @Public()
   @Post('local/sign-up')
   @HttpCode(HttpStatus.CREATED)
-  signUpLocal(@Body() dto: AuthDto): Promise<Tokens> {
+  signUpLocal(@Body() dto: SignUpDto): Promise<SignUpResponse> {
     return this.authService.signUpLocal(dto);
   }
 
   @Public()
   @Post('local/sign-in')
   @HttpCode(HttpStatus.OK)
-  signInLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    console.log(dto);
+  signInLocal(@Body() dto: SignInDto): Promise<SignInResponse> {
     return this.authService.signInLocal(dto);
   }
 

@@ -7,6 +7,7 @@ import { AtGuard } from './common/guards';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['debug', 'error'],
+    cors: true,
   });
 
   app.useGlobalPipes(new ValidationPipe());

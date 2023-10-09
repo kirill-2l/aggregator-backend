@@ -1,2 +1,3 @@
 export * from './tokens.type';
-export * from './strategy.enum';
+export * from './strategy.type';
+export * from './responses.type';
