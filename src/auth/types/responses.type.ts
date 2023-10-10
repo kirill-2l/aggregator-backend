@@ -2,13 +2,11 @@ import { User } from 'src/user/types';
 import { Tokens } from './tokens.type';
 
 export interface SignInResponse {
-  user: Pick<User, 'email' | 'id'>;
+  user: Omit<User, 'password'>;
   tokens: Tokens;
 }
 
 export interface SignUpResponse {
-  email: string;
-  name: string;
-  password: string;
+  user: User;
   tokens: Tokens;
 }

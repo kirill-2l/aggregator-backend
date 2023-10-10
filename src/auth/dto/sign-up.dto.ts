@@ -9,13 +9,15 @@ export class SignUpDto {
     example: 'mail@google.com',
     uniqueItems: true,
   })
-  username: string;
+  email: string;
+
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
     maxLength: 50,
   })
   password: string;
+
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
